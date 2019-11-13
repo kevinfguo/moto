@@ -82,6 +82,7 @@ class SESBackend(BaseBackend):
         self.sent_messages = []
         self.sent_message_count = 0
         self.sns_topics = {}
+        self.templates = {}
 
     def _is_verified_address(self, source):
         _, address = parseaddr(source)
@@ -231,5 +232,8 @@ class SESBackend(BaseBackend):
 
         return {}
 
+    def create_template(self, templateName, subject, text, html):
+        self.templates[templateName] = {'subject': subject, 'text': text, 'html': html}
+        return {}
 
 ses_backend = SESBackend()

@@ -214,3 +214,16 @@ def test_send_raw_email_without_source_or_from():
     kwargs = dict(RawMessage={"Data": message.as_string()})
 
     conn.send_raw_email.when.called_with(**kwargs).should.throw(ClientError)
+
+@mock_ses
+def test_create_template():
+    conn = boto3.client("ses", region_name="us-east-1")
+
+    conn.create_template(
+        Template={
+            "TemplateName":"test-template",
+            "SubjectPart":"test subject",
+            "TextPart":"this is a test email",
+            "HtmlPart":"<b> this is a test email</b>"
+        }
+    )

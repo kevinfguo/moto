@@ -133,6 +133,16 @@ class EmailResponse(BaseResponse):
         template = self.response_template(SET_IDENTITY_NOTIFICATION_TOPIC_RESPONSE)
         return template.render()
 
+    def create_template(self):
+        templateName = self.querystring.get("Template.TemplateName")[0]
+        subject = self.querystring.get("Template.SubjectPart")[0]
+        text = self.querystring.get("Template.TextPart")[0]
+        html = self.querystring.get("Template.HtmlPart")[0]
+        message = ses_backend.create_template(
+            templateName, subject, text, html
+        )
+        template = self.response_template(CREATE_TEMPLATE_RESPONSE)
+        return template.render()
 
 VERIFY_EMAIL_IDENTITY = """<VerifyEmailIdentityResponse xmlns="http://ses.amazonaws.com/doc/2010-12-01/">
   <VerifyEmailIdentityResult/>
@@ -248,3 +258,10 @@ SET_IDENTITY_NOTIFICATION_TOPIC_RESPONSE = """<SetIdentityNotificationTopicRespo
     <RequestId>47e0ef1a-9bf2-11e1-9279-0100e8cf109a</RequestId>
   </ResponseMetadata>
 </SetIdentityNotificationTopicResponse>"""
+
+CREATE_TEMPLATE_RESPONSE = """<CreateTemplateResponse xmlns="http://ses.amazonaws.com/doc/2010-12-01/">
+  <CreateTemplateResult/>
+  <ResponseMetadata>
+    <RequestId>d96bd874-9bf2-11e1-8ee7-c98a0037a2b6</RequestId>
+  </ResponseMetadata>
+</CreateTemplateResponse>"""
